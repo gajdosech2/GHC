@@ -4,6 +4,7 @@
 #include <numeric>
 #include <vector>
 #include <algorithm>
+#include <map>
 
 class More
 {
@@ -12,7 +13,7 @@ public:
 	{
 		More more;
 		more.ReadInputFile(file_name);
-		more.Dynamic();
+		more.Greedy();
 		more.Result();
 		more.WriteToFile(file_name);
 	}
@@ -81,7 +82,7 @@ private:
 		return score;
 	}
 
-	void Find()
+	void Brute()
 	{
 		std::vector<int> indices(slices.size());
 		std::iota(indices.begin(), indices.end(), 0);
@@ -91,11 +92,11 @@ private:
 		}
 		else
 		{
-			Brute(indices, std::vector<int>());
+			Backtrack(indices, std::vector<int>());
 		}
 	}
 
-	void Brute(std::vector<int> available, std::vector<int> took)
+	void Backtrack(std::vector<int> available, std::vector<int> took)
 	{
 		int current_score = Score(took);
 		if (best_score == m)
@@ -127,7 +128,7 @@ private:
 						new_took.push_back(new_index);
 					}
 					new_took.push_back(index);
-					Brute(new_available, new_took);
+					Backtrack(new_available, new_took);
 				}
 			}
 		}
@@ -171,6 +172,45 @@ private:
 			scores[i] = score;
 		}
 		best_choice = table[m];
+		std::sort(best_choice.begin(), best_choice.end());
+	}
+
+	void Simple()
+	{
+		int score = 0;
+		for (int i = 0; i < slices.size() && score != m; i++) 
+		{
+			if (score + slices[i] <= m)
+			{
+				score += slices[i];
+				best_choice.push_back(i);
+			}
+		}
+	}
+
+	void Greedy()
+	{
+		std::vector<int> new_slices(slices.size());
+		std::copy(slices.begin(), slices.end(), new_slices.begin());
+
+		std::vector<int> indices(new_slices.size());
+		std::iota(indices.begin(), indices.end(), 0);
+		std::sort(indices.begin(), indices.end(),
+			[&](int i, int j) { return new_slices[i] < new_slices[j]; });
+		std::reverse(indices.begin(), indices.end());
+
+		std::sort(new_slices.begin(), new_slices.end());
+		std::reverse(new_slices.begin(), new_slices.end());
+
+		int score = 0;
+		for (int i = 0; i < new_slices.size() && score != m; i++)
+		{
+			if (score + new_slices[i] <= m)
+			{
+				score += new_slices[i];
+				best_choice.push_back(indices[i]);
+			}
+		}
 		std::sort(best_choice.begin(), best_choice.end());
 	}
 };
