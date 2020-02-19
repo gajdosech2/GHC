@@ -2,6 +2,6 @@
 
 int main()
 {
-    More::Solve("d_quite_big");
+    More::Solve("c_medium");
     return EXIT_SUCCESS;
 }

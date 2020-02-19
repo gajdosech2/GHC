@@ -135,38 +135,40 @@ private:
 
 	void Dynamic()
 	{
-		std::vector<std::vector<int>> table;
-		table.push_back({});
-
+		std::vector<int> scores(m + 1);
+		std::vector<std::vector<int>> table(m + 1);
+		table[0] = {};
+		scores[0] = 0;
 		for (int i = 1; i <= m; i++)
 		{
-			std::vector<int> best(0);
-			for (int j : table[i - 1])
+			if (i % 1000 == 0)
 			{
-				best.push_back(j);
+				std::cout << (int)((float)i / (float)m * 100) << "%" << std::endl;
 			}
-			int score = Score(best);
-
+			std::vector<int> choice;
+			for (int type : table[i - 1])
+			{
+				choice.push_back(type);
+			}
+			int score = scores[i - 1];
 			for (int j = 0; j < slices.size(); j++)
 			{
-				if (i - slices[j] >= 0 && 
-					std::find(table[i - slices[j]].begin(), table[i - slices[j]].end(), j) == table[i - slices[j]].end())
+				int k = i - slices[j];
+				if (i - slices[j] >= 0 &&
+					std::find(table[k].begin(), table[k].end(), j) == table[k].end() &&
+					scores[k] + slices[j] > score)
 				{
-					std::vector<int> new_best;
-					for (int type : table[i - slices[j]])
+					choice.clear();
+					for (int type : table[k])
 					{
-						new_best.push_back(type);
+						choice.push_back(type);
 					}
-					new_best.push_back(j);
-					int s = Score(new_best);
-					if (s > score) 
-					{
-						best = new_best;
-						score = s;
-					}
+					choice.push_back(j);
+					score = scores[k] + slices[j];
 				}
 			}
-			table.push_back(best);
+			table[i] = choice;
+			scores[i] = score;
 		}
 		best_choice = table[m];
 		std::sort(best_choice.begin(), best_choice.end());
