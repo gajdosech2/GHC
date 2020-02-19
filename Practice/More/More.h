@@ -3,6 +3,7 @@
 #include <string>
 #include <numeric>
 #include <vector>
+#include <algorithm>
 
 class More
 {
@@ -11,7 +12,7 @@ public:
 	{
 		More more;
 		more.ReadInputFile(file_name);
-		more.Find();
+		more.Dynamic();
 		more.Result();
 		more.WriteToFile(file_name);
 	}
@@ -27,18 +28,18 @@ private:
 	{
 		std::ifstream input;
 		input.open("../in/" + file_name + ".in", std::ios::in);
-		if (input.is_open()) 
-		{ 
+		if (input.is_open())
+		{
 			std::string token;
 			std::getline(input, token, ' ');
 			m = std::stoi(token);
 			std::getline(input, token, '\n');
 
-			while (std::getline(input, token, ' ')) 
+			while (std::getline(input, token, ' '))
 			{
 				slices.push_back(std::stoi(token));
 			}
-			input.close(); 
+			input.close();
 		}
 	}
 
@@ -62,7 +63,7 @@ private:
 	{
 		std::cout << "Types: " << best_choice.size() << std::endl;
 		std::cout << "Best: ";
-		for (int type : best_choice) 
+		for (int type : best_choice)
 		{
 			std::cout << type << " ";
 		}
@@ -87,8 +88,8 @@ private:
 		if (std::accumulate(slices.begin(), slices.end(), 0) <= m)
 		{
 			best_choice = indices;
-		} 
-		else 
+		}
+		else
 		{
 			Brute(indices, std::vector<int>());
 		}
@@ -101,7 +102,7 @@ private:
 		{
 			return;
 		}
-		if (current_score > best_score) 
+		if (current_score > best_score)
 		{
 			best_score = current_score;
 			best_choice = took;
@@ -113,9 +114,9 @@ private:
 				if (current_score + slices[index] <= m)
 				{
 					std::vector<int> new_available;
-					for (int new_index : available) 
+					for (int new_index : available)
 					{
-						if (new_index != index) 
+						if (new_index != index)
 						{
 							new_available.push_back(new_index);
 						}
@@ -130,5 +131,44 @@ private:
 				}
 			}
 		}
+	}
+
+	void Dynamic()
+	{
+		std::vector<std::vector<int>> table;
+		table.push_back({});
+
+		for (int i = 1; i <= m; i++)
+		{
+			std::vector<int> best(0);
+			for (int j : table[i - 1])
+			{
+				best.push_back(j);
+			}
+			int score = Score(best);
+
+			for (int j = 0; j < slices.size(); j++)
+			{
+				if (i - slices[j] >= 0 && 
+					std::find(table[i - slices[j]].begin(), table[i - slices[j]].end(), j) == table[i - slices[j]].end())
+				{
+					std::vector<int> new_best;
+					for (int type : table[i - slices[j]])
+					{
+						new_best.push_back(type);
+					}
+					new_best.push_back(j);
+					int s = Score(new_best);
+					if (s > score) 
+					{
+						best = new_best;
+						score = s;
+					}
+				}
+			}
+			table.push_back(best);
+		}
+		best_choice = table[m];
+		std::sort(best_choice.begin(), best_choice.end());
 	}
 };
