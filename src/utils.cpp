@@ -1,6 +1,9 @@
 #include "utils.h"
 #include <fstream>
 #include <unordered_set>
+#include <algorithm>
+#include <numeric>
+#include <iostream>
 #include <glm/glm.hpp>
 
 int ReadFile(std::string file, Global &global)
@@ -16,7 +19,8 @@ int ReadFile(std::string file, Global &global)
   text_file >> global.num_libraries;
   text_file >> global.days;
 
-  global.book_duplicity.resize(global.books);
+  std::vector<int> book_duplicity;
+  book_duplicity.resize(global.books);
 
   for (int i = 0; i < global.books; i++)
   {
@@ -36,11 +40,32 @@ int ReadFile(std::string file, Global &global)
       int book_id;
       text_file >> book_id;
       l.books.push_back(book_id);
-      global.book_duplicity[book_id] += 1;
+      book_duplicity[book_id] += 1;
     }
     global.libs.push_back(l);
   }
+
+  global.book_duplicity_scores.resize(global.books);
+  int book_dup_max = *std::max_element(book_duplicity.begin(), book_duplicity.end());
+  for (int i = 0; i < global.books; ++i)
+  {
+    global.book_duplicity_scores[i] = (float)book_duplicity[i] / book_dup_max;
+  }
+
   text_file.close();
+}
+
+std::vector<int> FilterLibraries(const Global &global)
+{
+  const auto &libs = global.libs;
+  std::vector<int> libraries_id(libs.size());
+  std::iota(libraries_id.begin(), libraries_id.end(), 0);
+  libraries_id.erase(std::remove_if(libraries_id.begin(), libraries_id.end(),
+      [&](const int lib_id)
+  {
+    return global.days < libs[lib_id].signup_time;
+  }), libraries_id.end());
+  return libraries_id;
 }
 
 int GetFinalScore(const Global &global)

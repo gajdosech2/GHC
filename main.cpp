@@ -13,8 +13,7 @@
 void NotSimpleGreedy(Global &global)
 {
   auto &libs = global.libs;
-  std::vector<int>libraries_id(libs.size());
-  std::iota(libraries_id.begin(), libraries_id.end(), 0);
+  std::vector<int> libraries_id = FilterLibraries(global);
   std::sort(libraries_id.begin(), libraries_id.end(), [&](const int &i, const int &j)
   {
     if (libs[i].signup_time == libs[j].signup_time)
@@ -51,8 +50,7 @@ void NotSimpleGreedy(Global &global)
 void SimpleGreedy(Global &global)
 {
   auto &libs = global.libs;
-  std::vector<int>libraries_id(libs.size());
-  std::iota(libraries_id.begin(), libraries_id.end(), 0);
+  std::vector<int> libraries_id = FilterLibraries(global);
   std::sort(libraries_id.begin(), libraries_id.end(), [&](const int &i, const int &j) { return libs[i].signup_time < libs[j].signup_time;});
 
   std::set<int> used_book_ids;

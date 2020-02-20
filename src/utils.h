@@ -21,12 +21,13 @@ struct Global
   int num_libraries;
   int days;
   std::vector<std::pair<int, int>> scores;
-  std::vector<int> book_duplicity;
+  std::vector<float> book_duplicity_scores;
 
   std::vector<Library> libs;
   std::vector<int> libs_result;
 };
 
+std::vector<int> FilterLibraries(const Global &global);
 int GetFinalScore(const Global &global);
 int ReadFile(std::string file, Global &global);
 int WriteFile(std::string file, const Global &global);

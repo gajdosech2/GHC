@@ -23,12 +23,12 @@ PRIVATE
 )
 target_link_directories(${PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/lib/${CMAKE_BUILD_TYPE})
 
-find_package(OpenMP REQUIRED)
+#find_package(OpenMP REQUIRED)
 
 target_link_libraries(${PROJECT_NAME} PRIVATE
   Utils
   COGS
-  OpenMP::OpenMP_CXX
+#  OpenMP::OpenMP_CXX
 )
 
 
