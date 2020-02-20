@@ -122,6 +122,47 @@ void SimpleGreedy(Global &global)
   }
 }
 
+void HackyGreedy(Global &global)
+{
+  auto &libs = global.libs;
+  std::vector<int> libraries_id = FilterLibraries(global);
+  std::sort(libraries_id.begin(), libraries_id.end(), [&](const int &i, const int &j)
+  {
+    int book_sum_score_i = LibraryBookScore(libs[i], global);
+    int book_sum_score_j = LibraryBookScore(libs[j], global);
+    float uniq_i = LibraryUniqueness(libs[i], global);
+    float uniq_j = LibraryUniqueness(libs[j], global);
+
+    return book_sum_score_i * uniq_i > book_sum_score_j * uniq_j;
+    //return (float)libs[i].signup_time / (float)book_sum_score_i < (float)libs[j].signup_time / (float)book_sum_score_j;
+    //return libs[i].number_books > libs[j].number_books;
+  });
+
+  std::set<int> used_book_ids;
+  auto &libs_result = global.libs_result;
+  libs_result.reserve(libs.size());
+  for (int library_id : libraries_id)
+  {
+    std::vector<int> chosen_books;
+    for (int book_id : libs[library_id].books)
+    {
+      if (used_book_ids.empty() || used_book_ids.find(book_id) == used_book_ids.end())
+      {
+        chosen_books.push_back(book_id);
+        used_book_ids.insert(book_id);
+      }
+    }
+
+    if (!chosen_books.empty())
+    {
+      std::sort(chosen_books.begin(), chosen_books.end());
+      libs[library_id].books_result = chosen_books;
+      libs_result.push_back(library_id);
+    }
+  }
+}
+
+
 int main(int argc, char *argv[])
 {
   std::vector<std::string> files =
