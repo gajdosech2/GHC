@@ -183,6 +183,11 @@ int main(int argc, char *argv[])
     std::cout << std::endl;
     //WriteFile(run_name, global);
     //std::cout << run_name << " score: " << GetFinalScore(global) << "\n";
+
+    UniqueGreedy(global);
+    WriteFile(run_name, global);
+    std::cout << run_name << " score: " << GetFinalScore(global) << "\n";
+
   }
   return EXIT_SUCCESS;
 }

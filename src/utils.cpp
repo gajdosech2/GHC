@@ -91,23 +91,25 @@ int GetFinalScore(const Global &global)
   for (int i = 1; i < global.libs_result.size(); ++i) {
     const int lib_id = global.libs_result[i];
     const int prev_lib_id = global.libs_result[i - 1];
-    start_time[lib_id] = start_time[prev_lib_id] + global.libs[prev_lib_id].signup_time;
+    start_time[lib_id] = ready_time[prev_lib_id];
     ready_time[lib_id] = start_time[lib_id] + global.libs[lib_id].signup_time;
   }
 
   for (int day = 0; day < global.days; ++day) {
     for (int lib_id = 0; lib_id < global.libs.size(); ++lib_id) {
-      if (ready_time[lib_id] <= day) {
+
+      const int days_sending = (day - ready_time[lib_id]);
+      if (days_sending >= 0) {
         for (int day_book = 0; day_book < global.libs[lib_id].books_day; ++day_book) {
-          int book_nr = (day - ready_time[lib_id]) * global.libs[lib_id].books_day + day_book;
+
+          int book_nr = days_sending * global.libs[lib_id].books_day + day_book;
           if (book_nr >= global.libs[lib_id].books_result.size()) {
             break;
           }
           int book_id = global.libs[lib_id].books_result[book_nr];
-          const int book = global.scores[book_id].second;
-          if (used_books.find(book) == used_books.end()) {
-            final_score += book;
-            used_books.insert(book); 
+          if (used_books.find(book_id) == used_books.end()) {
+            final_score += global.scores[book_id].second;
+            used_books.insert(book_id);
           }
         }
       }
