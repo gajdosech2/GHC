@@ -94,7 +94,7 @@ int main(int argc, char *argv[])
     ReadFile(run_name, global);
     SimpleGreedy(global);
     WriteFile(run_name, global);
-    //std::cout << run_name << " score: " << GetFinalScore(global) << "\n";
+    std::cout << run_name << " score: " << GetFinalScore(global) << "\n";
   }
   return EXIT_SUCCESS;
 
