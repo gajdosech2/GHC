@@ -68,6 +68,16 @@ std::vector<int> FilterLibraries(const Global &global)
   return libraries_id;
 }
 
+float LibraryUniqueness(const Library &library, const Global &global)
+{
+  float score = 0;
+  for (int book_id : library.books)
+  {
+    score += (1 - global.book_duplicity_scores[book_id]);
+  }
+  return score / library.number_books;
+}
+
 int GetFinalScore(const Global &global)
 {
   int final_score = 0;
