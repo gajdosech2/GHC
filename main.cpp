@@ -17,6 +17,7 @@ struct Library
   int signup_time;
   int books_day;
   std::vector<int> books;
+  std::vector<int> books_result;
 
   int Score()
   {
@@ -30,6 +31,7 @@ struct Library
 };
 
 std::vector<Library> libs;
+std::vector<int> libs_result;
 
 int ReadFile(std::string file)
 {
@@ -68,10 +70,29 @@ int ReadFile(std::string file)
   text_file.close();
 }
 
+int WriteFile(std::string file)
+{
+  std::ofstream text_file;
+  text_file.open(dataset_path + "/" + file + ".txt");
+  if (!text_file.is_open())
+  {
+    return EXIT_FAILURE;
+  }
+  text_file << libs_result.size() << "\n";
+  for (const int lib_id : libs_result)
+  {
+    const auto &lib = libs[lib_id];
+    text_file << lib_id << " " << lib.books_result.size();
+
+  }
+}
+
 int main(int argc, char *argv[])
 {
   std::cout << "Hello world!";
-  ReadFile("a_example");
+  const std::string run_name = "a_example";
+  ReadFile(run_name);
+  WriteFile(run_name);
   return 0;
 }
 
