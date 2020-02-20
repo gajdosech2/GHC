@@ -5,6 +5,7 @@
 #include <map>
 #include <set>
 #include <numeric>
+#include <unordered_set>
 #include <glm/glm.hpp>
 
 const std::string dataset_path = "../../../input/";
@@ -40,12 +41,21 @@ std::vector<int> libs_result;
 int GetFinalScore() {
   int final_score = 0;
   int signup_start = 0;
+  std::unordered_set<int> used_books;
   for (auto& lib_index : libs_result) {
-    const int num_of_processed_books = glm::min(days - signup_start, libs[lib_index].number_books);
+    const int num_of_days = glm::abs(days - signup_start - libs[lib_index].signup_time);
+    const int num_of_processed_books = num_of_days * libs[lib_index].books_day;
     for (int book_id = 0; book_id < num_of_processed_books; ++book_id) {
-      final_score += libs[lib_index].books_result[book_id];
+      if (book_id >= libs[lib_index].number_books) {
+        break;
+      }
+      const int book = scores[libs[lib_index].books_result[book_id]].second;
+      if (used_books.find(book) == used_books.end()) {
+        final_score += book;
+        used_books.insert(book);
+      }
     }
-    signup_start += num_of_processed_books;
+    signup_start += num_of_days;
   }
   return final_score;
 }
@@ -137,6 +147,7 @@ int main(int argc, char *argv[])
   const std::string run_name = "a_example";
   ReadFile(run_name);
   SimpleGreedy();
+  std::cout << "Final score is :" << GetFinalScore() << std::endl;
   WriteFile(run_name);
   return 0;
 }
