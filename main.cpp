@@ -36,13 +36,15 @@ std::vector<int> libs_result;
 
 int GetFinalScore() {
   int final_score = 0;
-  int start_time = 0;
+  int signup_start = 0;
   for (auto& lib_index : libs_result) {
-    for (int i = 0; i < glm::min(days - start_time, libs[lib_index].number_books); ++i) {
-      libs[lib_index].books
-      final_score += 
+    const int num_of_processed_books = glm::min(days - signup_start, libs[lib_index].number_books);
+    for (int book_id = 0; book_id < num_of_processed_books; ++book_id) {
+      final_score += libs[lib_index].books_result[book_id];
     }
+    signup_start += num_of_processed_books;
   }
+  return final_score;
 }
 
 int ReadFile(std::string file)
