@@ -5,11 +5,12 @@
 #include <map>
 #include <set>
 #include <numeric>
+#include <unordered_set>
 #include <glm/glm.hpp>
 
 #include "utils.h"
 
-void NotSoSimpleGreedy(Global &global)
+void NotSimpleGreedy(Global &global)
 {
   auto &libs = global.libs;
   std::vector<int>libraries_id(libs.size());
@@ -80,7 +81,6 @@ void SimpleGreedy(Global &global)
 
 int main(int argc, char *argv[])
 {
-  std::cout << "Hello world!";
   std::vector<std::string> files =
   {
     "a_example",
@@ -96,8 +96,10 @@ int main(int argc, char *argv[])
     ReadFile(run_name, global);
     SimpleGreedy(global);
     WriteFile(run_name, global);
+    //std::cout << run_name << " score: " << GetFinalScore(global) << "\n";
   }
   return EXIT_SUCCESS;
+
 }
 
 

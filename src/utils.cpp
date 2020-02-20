@@ -1,5 +1,6 @@
 #include "utils.h"
 #include <fstream>
+#include <unordered_set>
 #include <glm/glm.hpp>
 
 int ReadFile(std::string file, Global &global)
@@ -46,14 +47,26 @@ int GetFinalScore(const Global &global)
 {
   int final_score = 0;
   int signup_start = 0;
+  std::unordered_set<int> used_books;
+  auto &libs = global.libs;
   for (auto &lib_index : global.libs_result)
   {
-    const int num_of_processed_books = glm::min(global.days - signup_start, global.libs[lib_index].number_books);
+    const int num_of_days = glm::abs(global.days - signup_start - libs[lib_index].signup_time);
+    const int num_of_processed_books = num_of_days * libs[lib_index].books_day;
     for (int book_id = 0; book_id < num_of_processed_books; ++book_id)
     {
-      final_score += global.libs[lib_index].books_result[book_id];
+      if (book_id >= libs[lib_index].number_books)
+      {
+        break;
+      }
+      const int book = global.scores[libs[lib_index].books_result[book_id]].second;
+      if (used_books.find(book) == used_books.end())
+      {
+        final_score += book;
+        used_books.insert(book);
+      }
     }
-    signup_start += num_of_processed_books;
+    signup_start += num_of_days;
   }
   return final_score;
 }
