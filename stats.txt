@@ -1,0 +1,54 @@
+cc        a_example    days: 7    libraries: 2    books: 6
+signup_time:   Statistic data: min 2, max 3, average 2.
+book_num:      Statistic data: min 4, max 5, average 4.
+library_score: Statistic data: min 0.125000, max 0.200000, average 0.162500.
+books_per_day: Statistic data: min 1, max 2, average 1.
+shipping_days: Statistic data: min 2, max 4, average 3.
+books_duplicit:Statistic data: min 0.500000, max 1.000000, average 0.750000.
+books_scores:  Statistic data: min 1.000000, max 6.000000, average 3.500000.
+
+        b_read_on    days: 1000    libraries: 100    books: 100000
+signup_time:   Statistic data: min 1, max 20, average 11.
+book_num:      Statistic data: min 1000, max 1000, average 1000.
+library_score: Statistic data: min 0.000000, max 0.000000, average 0.000000.
+books_per_day: Statistic data: min 1, max 1, average 1.
+shipping_days: Statistic data: min 1000, max 1000, average 1000.
+books_duplicit:Statistic data: min 1.000000, max 1.000000, average 1.000000.
+books_scores:  Statistic data: min 100.000000, max 100.000000, average 100.000000.
+
+        c_incunabula    days: 100000    libraries: 10000    books: 100000
+signup_time:   Statistic data: min 10, max 1000, average 506.
+book_num:      Statistic data: min 10, max 20, average 15.
+library_score: Statistic data: min 0.555556, max 0.855556, average 0.721067.
+books_per_day: Statistic data: min 210, max 99998, average 49511.
+shipping_days: Statistic data: min 0, max 0, average 0.
+books_duplicit:Statistic data: min 0.000000, max 1.000000, average 0.166980.
+books_scores:  Statistic data: min 1.000000, max 600.000000, average 300.764150.
+
+        d_tough_choices    days: 30001    libraries: 30000    books: 78600
+signup_time:   Statistic data: min 2, max 2, average 2.
+book_num:      Statistic data: min 1, max 14, average 7.
+library_score: Statistic data: min 0.023810, max 0.333333, average 0.048650.
+books_per_day: Statistic data: min 1, max 1, average 1.
+shipping_days: Statistic data: min 1, max 14, average 7.
+books_duplicit:Statistic data: min 0.666667, max 1.000000, average 0.936387.
+books_scores:  Statistic data: min 65.000000, max 65.000000, average 65.000000.
+
+        e_so_many_books    days: 200    libraries: 1000    books: 100000
+signup_time:   Statistic data: min 1, max 10, average 5.
+book_num:      Statistic data: min 2, max 1000, average 491.
+library_score: Statistic data: min 0.534722, max 0.738095, average 0.670895.
+books_per_day: Statistic data: min 1, max 2, average 1.
+shipping_days: Statistic data: min 1, max 1000, average 368.
+books_duplicit:Statistic data: min 0.000000, max 1.000000, average 0.273301.
+books_scores:  Statistic data: min 1.000000, max 250.000000, average 125.486480.
+
+        f_libraries_of_the_world    days: 700    libraries: 1000    books: 100000
+signup_time:   Statistic data: min 30, max 300, average 166.
+book_num:      Statistic data: min 1, max 1000, average 509.
+library_score: Statistic data: min 0.529412, max 0.764706, average 0.641778.
+books_per_day: Statistic data: min 5, max 10, average 7.
+shipping_days: Statistic data: min 0, max 199, average 71.
+books_duplicit:Statistic data: min 0.000000, max 1.000000, average 0.299613.
+books_scores:  Statistic data: min 1.000000, max 800.000000, average 401.111420.
+
