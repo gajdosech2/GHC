@@ -31,3 +31,4 @@ std::vector<int> FilterLibraries(const Global &global);
 int GetFinalScore(const Global &global);
 int ReadFile(std::string file, Global &global);
 int WriteFile(std::string file, const Global &global);
+float LibraryUniqueness(const Library &library, const Global &global);
