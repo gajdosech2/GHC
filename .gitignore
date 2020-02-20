@@ -17,6 +17,7 @@ out/*
 **/PhotoneoLogFiles
 **/build
 **/out
+**/output
 
 # CLion and CMake folders
 **/cmake-build-debug
