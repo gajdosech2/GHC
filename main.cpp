@@ -10,6 +10,7 @@
 const std::string dataset_path = "../../../input/";
 const std::string output_path = "../../../output/";
 
+
 int books;
 int num_libraries;
 int days;
@@ -37,12 +38,15 @@ struct Library
 std::vector<Library> libs;
 std::vector<int> libs_result;
 
-int GetFinalScore() {
+int GetFinalScore()
+{
   int final_score = 0;
   int signup_start = 0;
-  for (auto& lib_index : libs_result) {
+  for (auto &lib_index : libs_result)
+  {
     const int num_of_processed_books = glm::min(days - signup_start, libs[lib_index].number_books);
-    for (int book_id = 0; book_id < num_of_processed_books; ++book_id) {
+    for (int book_id = 0; book_id < num_of_processed_books; ++book_id)
+    {
       final_score += libs[lib_index].books_result[book_id];
     }
     signup_start += num_of_processed_books;
@@ -107,14 +111,15 @@ int WriteFile(std::string file)
     text_file << "\n";
   }
 }
+
 void SimpleGreedy()
 {
   std::vector<int>libraries_id(libs.size());
   std::iota(libraries_id.begin(), libraries_id.end(), 0);
   std::sort(libraries_id.begin(), libraries_id.end(), [](const int &i, const int &j) {return libs[i].signup_time < libs[j].signup_time; });
 
-  libs_result = libraries_id;
   std::set<int> used_book_ids;
+  libs_result.reserve(libs.size());
   for (int library_id : libraries_id)
   {
     std::vector<int> chosen_books;
@@ -126,19 +131,38 @@ void SimpleGreedy()
         used_book_ids.insert(book_id);
       }
     }
-    std::sort(chosen_books.begin(), chosen_books.end());
-    libs[library_id].books_result = chosen_books;
+
+    if (!chosen_books.empty())
+    {
+      std::sort(chosen_books.begin(), chosen_books.end());
+      libs[library_id].books_result = chosen_books;
+      libs_result.push_back(library_id);
+    }
   }
 }
 
 int main(int argc, char *argv[])
 {
   std::cout << "Hello world!";
-  const std::string run_name = "a_example";
-  ReadFile(run_name);
-  SimpleGreedy();
-  WriteFile(run_name);
-  return 0;
+  std::vector<std::string> files =
+  {
+    "a_example",
+    "b_read_on",
+    "c_incunabula",
+    "d_tough_choices",
+    "e_so_many_books",
+    "f_libraries_of_the_world"
+  };
+  for (std::string run_name : files)
+  {
+    scores.clear();
+    libs.clear();
+    libs_result.clear();
+    ReadFile(run_name);
+    SimpleGreedy();
+    WriteFile(run_name);
+  }
+  return EXIT_SUCCESS;
 }
 
 
