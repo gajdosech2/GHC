@@ -1,0 +1,3 @@
+C:/luk/GHC/vs_solution/CMakeFiles/GHC_Project.dir
+C:/luk/GHC/vs_solution/CMakeFiles/ALL_BUILD.dir
+C:/luk/GHC/vs_solution/CMakeFiles/ZERO_CHECK.dir

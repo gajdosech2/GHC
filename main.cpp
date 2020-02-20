@@ -8,6 +8,8 @@
 #include <unordered_set>
 #include <glm/glm.hpp>
 
+#include <Utils/Statistics.h>
+
 #include "utils.h"
 
 void UniqueGreedy(Global &global)
@@ -163,6 +165,43 @@ void HackyGreedy(Global &global)
 }
 
 
+void AnalyzeData(Global &global)
+{
+  utils::Statistics<long long> signup_time;
+  utils::Statistics<long long> book_num;
+  utils::Statistics<long long> scores;
+  utils::Statistics<double> books_uniqueness;
+  utils::Statistics<long long> books_per_day;
+  utils::Statistics<long long> shipping_days;
+  for (const auto &lib : global.libs)
+  {
+    signup_time.Add(lib.signup_time);
+    book_num.Add(lib.books.size());
+    books_uniqueness.Add(LibraryUniqueness(lib, global));
+    books_per_day.Add(lib.books_day);
+    shipping_days.Add(lib.books.size() / lib.books_day);
+  }
+  std::cout << "signup_time:   " << signup_time.ToString() << std::endl;
+  std::cout << "book_num:      " << book_num.ToString() << std::endl;
+  std::cout << "library_score: " << books_uniqueness.ToString() << std::endl;
+  std::cout << "books_per_day: " << books_per_day.ToString() << std::endl;
+  std::cout << "shipping_days: " << shipping_days.ToString() << std::endl;
+
+  utils::Statistics<double> books_duplicity;
+  for (const auto &score : global.book_duplicity_scores)
+  {
+    books_duplicity.Add(score);
+  }
+  std::cout << "books_duplicit:" << books_duplicity.ToString() << std::endl;
+
+  utils::Statistics<double> books_scores;
+  for (const auto &score : global.scores)
+  {
+    books_scores.Add(score.second);
+  }
+  std::cout << "books_scores:  " << books_scores.ToString() << std::endl;
+}
+
 int main(int argc, char *argv[])
 {
   std::vector<std::string> files =
@@ -178,12 +217,20 @@ int main(int argc, char *argv[])
   {
     Global global;
     ReadFile(run_name, global);
+    std::cout << "\t" << run_name << "    days: " << global.days;
+    std::cout << "    libraries: " << global.libs.size();
+    std::cout << "    books: " << global.books << std::endl;
+    AnalyzeData(global);
+    std::cout << std::endl;
+    //WriteFile(run_name, global);
+    //std::cout << run_name << " score: " << GetFinalScore(global) << "\n";
+
     UniqueGreedy(global);
     WriteFile(run_name, global);
-    //std::cout << run_name << " score: " << GetFinalScore(global) << "\n";
+    std::cout << run_name << " score: " << GetFinalScore(global) << "\n";
+
   }
   return EXIT_SUCCESS;
-
 }
 
 

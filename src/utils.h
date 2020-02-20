@@ -1,6 +1,8 @@
 #pragma once
 
 #include <string>
+#include <optional>
+#include <Utils/ExtSTD.h>
 #include <vector>
 
 const std::string dataset_path = "../../../input/";
@@ -13,6 +15,11 @@ struct Library
   int books_day;
   std::vector<int> books;
   std::vector<int> books_result;
+
+  float GetBookUniqueness(const std::vector<float> &book_scores) const
+  {
+    return std_ext::Sum(books, [book_scores](int book_id) { return book_scores[book_id];  });
+  }
 };
 
 struct Global
