@@ -42,22 +42,37 @@ std::vector<int> libs_result;
 int GetFinalScore()
 {
   int final_score = 0;
-  int signup_start = 0;
+
   std::unordered_set<int> used_books;
-  for (auto& lib_index : libs_result) {
-    const int num_of_days = glm::abs(days - signup_start - libs[lib_index].signup_time);
-    const int num_of_processed_books = num_of_days * libs[lib_index].books_day;
-    for (int book_id = 0; book_id < num_of_processed_books; ++book_id) {
-      if (book_id >= libs[lib_index].number_books) {
-        break;
-      }
-      const int book = scores[libs[lib_index].books_result[book_id]].second;
-      if (used_books.find(book) == used_books.end()) {
-        final_score += book;
-        used_books.insert(book);
+  std::vector<int> start_time(libs.size());
+  std::vector<int> ready_time(libs.size());
+
+  start_time[libs_result[0]] = 0;
+  ready_time[libs_result[0]] = libs[libs_result[0]].signup_time;
+  for (int i = 1; i < libs_result.size(); ++i) {
+    const int lib_id = libs_result[i];
+    const int prev_lib_id = libs_result[i - 1];
+    start_time[lib_id] = start_time[prev_lib_id] + libs[prev_lib_id].signup_time;
+    ready_time[lib_id] = start_time[lib_id] + libs[lib_id].signup_time;
+  }
+
+  for (int day = 0; day < days; ++day) {
+    for (int lib_id = 0; lib_id < libs.size(); ++lib_id) {
+      if (ready_time[lib_id] <= day) {
+        for (int day_book = 0; day_book < libs[lib_id].books_day; ++day_book) {
+          int book_nr = (day - ready_time[lib_id]) * libs[lib_id].books_day + day_book;
+          if (book_nr >= libs[lib_id].books_result.size()) {
+            break;
+          }
+          int book_id = libs[lib_id].books_result[book_nr];
+          const int book = scores[book_id].second;
+          if (used_books.find(book) == used_books.end()) {
+            final_score += book;
+            used_books.insert(book);
+          }
+        }
       }
     }
-    signup_start += num_of_days;
   }
   return final_score;
 }
@@ -196,14 +211,14 @@ int main(int argc, char *argv[])
     "e_so_many_books",
     "f_libraries_of_the_world"
   };
-  for (std::string run_name : files)
+  for (std::string &run_name : files)
   {
     scores.clear();
     libs.clear();
     libs_result.clear();
     ReadFile(run_name);
     NotSoSimpleGreedy();
-    //std::cout << "File '" << run_name << "' score is :" << GetFinalScore() << std::endl;
+    std::cout << "File '" << run_name << "' score is :" << GetFinalScore() << std::endl;
     WriteFile(run_name);
   }
   return EXIT_SUCCESS;
