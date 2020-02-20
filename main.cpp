@@ -187,7 +187,6 @@ void SimpleGreedy()
 
 int main(int argc, char *argv[])
 {
-  std::cout << "Hello world!";
   std::vector<std::string> files =
   {
     "a_example",
@@ -204,7 +203,7 @@ int main(int argc, char *argv[])
     libs_result.clear();
     ReadFile(run_name);
     NotSoSimpleGreedy();
-  std::cout << "Final score is :" << GetFinalScore() << std::endl;
+    //std::cout << "File '" << run_name << "' score is :" << GetFinalScore() << std::endl;
     WriteFile(run_name);
   }
   return EXIT_SUCCESS;
