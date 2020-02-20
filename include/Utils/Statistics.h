@@ -122,8 +122,6 @@ namespace utils
     {
       std::string text;
       text += "Statistic data: ";
-      text += std::to_string(data_.size()) + " records, ";
-      text += "sum of elements " + std::to_string(data_sum_) + ", ";
       text += "min " + std::to_string(data_min_) + ", ";
       text += "max " + std::to_string(data_max_) + ", ";
       text += "average " + std::to_string(Average()) + ".";

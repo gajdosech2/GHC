@@ -330,18 +330,6 @@ namespace std_ext
     return std::find(vector.begin(), vector.end(), element) != vector.end();
   }
 
-  //! If an element exists in the vector, returns its index.
-  template <typename Type>
-  std::optional<size_t> GetIndex(const Type element, const std::vector<Type> &vector)
-  {
-    const auto found_element = std::find(vector.begin(), vector.end(), element);
-    if (found_element == vector.end())
-    {
-      return std::nullopt;
-    }
-    return found_element - vector.begin();
-  }
-
   //! Check if the set contains an element.
   template <typename Type>
   bool Contains(const Type element, const std::set<Type> &set)
