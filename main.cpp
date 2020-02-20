@@ -1,7 +1,10 @@
 #include <iostream>
 #include <fstream>
+#include <algorithm>
 #include <vector>
 #include <map>
+#include <set>
+#include <numeric>
 
 const std::string dataset_path = "../../../input/";
 const std::string output_path = "../../../output/";
@@ -73,7 +76,7 @@ int ReadFile(std::string file)
 int WriteFile(std::string file)
 {
   std::ofstream text_file;
-  text_file.open(dataset_path + "/" + file + ".txt");
+  text_file.open(output_path + "/" + file + ".txt");
   if (!text_file.is_open())
   {
     return EXIT_FAILURE;
@@ -86,12 +89,36 @@ int WriteFile(std::string file)
 
   }
 }
+void SimpleGreedy()
+{
+  std::vector<int>libraries_id(libs.size());
+  std::iota(libraries_id.begin(), libraries_id.end(), 0);
+  std::sort(libraries_id.begin(), libraries_id.end(), [](const int &i, const int &j) {return libs[i].signup_time < libs[j].signup_time; });
+
+  libs_result = libraries_id;
+  std::set<int> used_book_ids;
+  for (int library_id : libraries_id)
+  {
+    std::vector<int> chosen_books;
+    for (int book_id : libs[library_id].books)
+    {
+      if (used_book_ids.empty() || used_book_ids.find(book_id) == used_book_ids.end())
+      {
+        chosen_books.push_back(book_id);
+        used_book_ids.insert(book_id);
+      }
+    }
+    std::sort(chosen_books.begin(), chosen_books.end());
+    libs[library_id].books_result = chosen_books;
+  }
+}
 
 int main(int argc, char *argv[])
 {
   std::cout << "Hello world!";
   const std::string run_name = "a_example";
   ReadFile(run_name);
+  SimpleGreedy();
   WriteFile(run_name);
   return 0;
 }
