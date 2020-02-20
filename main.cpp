@@ -112,11 +112,47 @@ int WriteFile(std::string file)
   }
 }
 
+void NotSoSimpleGreedy()
+{
+  std::vector<int>libraries_id(libs.size());
+  std::iota(libraries_id.begin(), libraries_id.end(), 0);
+  std::sort(libraries_id.begin(), libraries_id.end(), [](const int &i, const int &j)
+  {
+    if (libs[i].signup_time == libs[j].signup_time)
+    {
+      return libs[i].books_day > libs[j].books_day;
+    }
+    return libs[i].signup_time < libs[j].signup_time;
+  });
+
+  std::set<int> used_book_ids;
+  libs_result.reserve(libs.size());
+  for (int library_id : libraries_id)
+  {
+    std::vector<int> chosen_books;
+    for (int book_id : libs[library_id].books)
+    {
+      if (used_book_ids.empty() || used_book_ids.find(book_id) == used_book_ids.end())
+      {
+        chosen_books.push_back(book_id);
+        used_book_ids.insert(book_id);
+      }
+    }
+
+    if (!chosen_books.empty())
+    {
+      std::sort(chosen_books.begin(), chosen_books.end());
+      libs[library_id].books_result = chosen_books;
+      libs_result.push_back(library_id);
+    }
+  }
+}
+
 void SimpleGreedy()
 {
   std::vector<int>libraries_id(libs.size());
   std::iota(libraries_id.begin(), libraries_id.end(), 0);
-  std::sort(libraries_id.begin(), libraries_id.end(), [](const int &i, const int &j) {return libs[i].signup_time < libs[j].signup_time; });
+  std::sort(libraries_id.begin(), libraries_id.end(), [](const int &i, const int &j) { return libs[i].signup_time < libs[j].signup_time;});
 
   std::set<int> used_book_ids;
   libs_result.reserve(libs.size());
@@ -159,7 +195,7 @@ int main(int argc, char *argv[])
     libs.clear();
     libs_result.clear();
     ReadFile(run_name);
-    SimpleGreedy();
+    NotSoSimpleGreedy();
     WriteFile(run_name);
   }
   return EXIT_SUCCESS;
