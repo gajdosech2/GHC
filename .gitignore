@@ -1,0 +1,31 @@
+# visual studio files 
+*/**/.vs
+.vs/*
+
+#build files
+out/*
+
+#python cache files
+*.pyc
+
+# custom patterns
+*.local*
+
+#log files
+*.log
+
+**/PhotoneoLogFiles
+**/build
+**/out
+
+# CLion and CMake folders
+**/cmake-build-debug
+**/cmake-build-release
+**/cmake-build
+**/cmake_build
+**/.idea
+
+# sonar folders
+**/.scannerwork
+# NuGet Packages folder
+packages/
