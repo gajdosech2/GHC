@@ -3,6 +3,13 @@ Project(GHC_Project LANGUAGES CXX VERSION 1.0.1)
 
 add_executable(${PROJECT_NAME} "")
 
+set(CMAKE_CXX_STANDARD 17)
+
+target_compile_definitions(${PROJECT_NAME}
+    PRIVATE GLM_ENABLE_EXPERIMENTAL
+    PRIVATE _CRT_SECURE_NO_WARNINGS
+)
+
 target_sources(${PROJECT_NAME} PRIVATE
   main.cpp
 )
