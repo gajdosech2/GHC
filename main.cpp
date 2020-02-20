@@ -82,8 +82,12 @@ int WriteFile(std::string file)
   for (const int lib_id : libs_result)
   {
     const auto &lib = libs[lib_id];
-    text_file << lib_id << " " << lib.books_result.size();
-
+    text_file << lib_id << " " << lib.books_result.size() << "\n";
+    for (const int book_id : lib.books_result)
+    {
+      text_file << book_id << " ";
+    }
+    text_file << "\n";
   }
 }
 
