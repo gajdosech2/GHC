@@ -133,7 +133,7 @@ int main(int argc, char *argv[])
     "e_so_many_books",
     "f_libraries_of_the_world"
   };
-  for (std::string run_name : files)
+  for (std::string &run_name : files)
   {
     Global global;
     ReadFile(run_name, global);

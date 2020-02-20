@@ -81,28 +81,39 @@ float LibraryUniqueness(const Library &library, const Global &global)
 int GetFinalScore(const Global &global)
 {
   int final_score = 0;
-  int signup_start = 0;
   std::unordered_set<int> used_books;
-  auto &libs = global.libs;
-  for (auto &lib_index : global.libs_result)
-  {
-    const int num_of_days = glm::abs(global.days - signup_start - libs[lib_index].signup_time);
-    const int num_of_processed_books = num_of_days * libs[lib_index].books_day;
-    for (int book_id = 0; book_id < num_of_processed_books; ++book_id)
-    {
-      if (book_id >= libs[lib_index].number_books)
-      {
-        break;
-      }
-      const int book = global.scores[libs[lib_index].books_result[book_id]].second;
-      if (used_books.find(book) == used_books.end())
-      {
-        final_score += book;
-        used_books.insert(book);
+  
+  std::vector<int> start_time(global.libs.size());
+  std::vector<int> ready_time(global.libs.size());
+        
+  start_time[global.libs_result[0]] = 0;
+  ready_time[global.libs_result[0]] = global.libs[global.libs_result[0]].signup_time;
+  for (int i = 1; i < global.libs_result.size(); ++i) {
+    const int lib_id = global.libs_result[i];
+    const int prev_lib_id = global.libs_result[i - 1];
+    start_time[lib_id] = start_time[prev_lib_id] + global.libs[prev_lib_id].signup_time;
+    ready_time[lib_id] = start_time[lib_id] + global.libs[lib_id].signup_time;
+  }
+
+  for (int day = 0; day < global.days; ++day) {
+    for (int lib_id = 0; lib_id < global.libs.size(); ++lib_id) {
+      if (ready_time[lib_id] <= day) {
+        for (int day_book = 0; day_book < global.libs[lib_id].books_day; ++day_book) {
+          int book_nr = (day - ready_time[lib_id]) * global.libs[lib_id].books_day + day_book;
+          if (book_nr >= global.libs[lib_id].books_result.size()) {
+            break;
+          }
+          int book_id = global.libs[lib_id].books_result[book_nr];
+          const int book = global.scores[book_id].second;
+          if (used_books.find(book) == used_books.end()) {
+            final_score += book;
+            used_books.insert(book); 
+          }
+        }
       }
     }
-    signup_start += num_of_days;
   }
+
   return final_score;
 }
 
