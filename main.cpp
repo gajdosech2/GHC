@@ -15,8 +15,8 @@ void SimpleGreedy(Global &global)
   std::iota(libraries_id.begin(), libraries_id.end(), 0);
   std::sort(libraries_id.begin(), libraries_id.end(), [&](const int &i, const int &j) {return global.libs[i].signup_time < global.libs[j].signup_time; });
 
-  global.libs_result = libraries_id;
   std::set<int> used_book_ids;
+  global.libs_result.reserve(global.libs.size());
   for (int library_id : libraries_id)
   {
     std::vector<int> chosen_books;
@@ -28,20 +28,36 @@ void SimpleGreedy(Global &global)
         used_book_ids.insert(book_id);
       }
     }
-    std::sort(chosen_books.begin(), chosen_books.end());
-    global.libs[library_id].books_result = chosen_books;
+
+    if (!chosen_books.empty())
+    {
+      std::sort(chosen_books.begin(), chosen_books.end());
+      global.libs[library_id].books_result = chosen_books;
+      global.libs_result.push_back(library_id);
+    }
   }
 }
 
 int main(int argc, char *argv[])
 {
   std::cout << "Hello world!";
-  const std::string run_name = "a_example";
-  Global global;
-  ReadFile(run_name, global);
-  SimpleGreedy(global);
-  WriteFile(run_name, global);
-  return 0;
+  std::vector<std::string> files =
+  {
+    "a_example",
+    "b_read_on",
+    "c_incunabula",
+    "d_tough_choices",
+    "e_so_many_books",
+    "f_libraries_of_the_world"
+  };
+  for (std::string run_name : files)
+  {
+    Global global;
+    ReadFile(run_name, global);
+    SimpleGreedy(global);
+    WriteFile(run_name, global);
+  }
+  return EXIT_SUCCESS;
 }
 
 
