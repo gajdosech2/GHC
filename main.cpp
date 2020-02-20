@@ -2,6 +2,7 @@
 #include <fstream>
 #include <vector>
 #include <map>
+#include <glm/glm.hpp>
 
 const std::string dataset_path = "../../../input/";
 const std::string output_path = "../../../output/";
@@ -32,6 +33,17 @@ struct Library
 
 std::vector<Library> libs;
 std::vector<int> libs_result;
+
+int GetFinalScore() {
+  int final_score = 0;
+  int start_time = 0;
+  for (auto& lib_index : libs_result) {
+    for (int i = 0; i < glm::min(days - start_time, libs[lib_index].number_books); ++i) {
+      libs[lib_index].books
+      final_score += 
+    }
+  }
+}
 
 int ReadFile(std::string file)
 {
